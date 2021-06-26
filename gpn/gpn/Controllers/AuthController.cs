@@ -26,6 +26,17 @@ namespace gpn.Controllers
             this.dataContext = dataContext;
         }
 
+        /// <summary>
+        /// Авторизация
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     {
+        ///         "email": "admin@admin.com",
+        ///         "password": "admin"
+        ///     }
+        /// </remarks>
         [HttpPost("/login")]
         public async Task<ActionResult<LoginResponseDto>> Auth([FromBody]LoginRequestDto requestDto)
         {
@@ -41,7 +52,7 @@ namespace gpn.Controllers
                         Email = x.Email,
                         Role = x.Role
                     },
-                    Company = new CompanyDto
+                    Company = x.Comapny == null ? null : new CompanyDto
                     {
                         ID = x.Comapny.Id,
                         Name = x.Comapny.Name
@@ -57,9 +68,13 @@ namespace gpn.Controllers
             var claims = new List<Claim>()
             {
                 new Claim("UserId", resp.User.Id.ToString()),
-                new Claim("CompanyId", resp.Company.ID.ToString()),
                 new Claim(ClaimTypes.Role, resp.User.Role.ToString())
             };
+
+            if(resp.Company is not null)
+            {
+                claims.Add(new Claim("CompanyId", resp.Company.ID.ToString()));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
                 Consts.SecurityKey));

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,9 +35,13 @@ namespace gpn
         {
             services.AddControllers();
             services.AddDbContext<GPNContext>();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(x =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "gpn", Version = "v1" });
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = "gpn", Version = "v1" });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                x.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
             });
 
             services.AddAuthentication(x =>
