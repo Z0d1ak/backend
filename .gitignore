@@ -32,3 +32,5 @@
 *.app
 gpn/gpn/bin
 gpn/.vs/*
+gpn/gpn/obj/Debug/*
+gpn/gpn/obj
