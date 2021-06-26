@@ -28,7 +28,8 @@ namespace gpn.Controllers
         public async Task<ActionResult<SearchResponseDto<ReponseOperationDto>>> GetOperations(
            [FromQuery] int? typeID,
            [FromQuery] int? pageNumber,
-           [FromQuery] int? companyID)
+           [FromQuery] int? companyID,
+           [FromQuery] string? equipmentNumber)
         {
             var companyIDScoped = this.Request.HttpContext.User.Claims.First(x => x.Type == "CompanyId").Value;
             if (!string.IsNullOrEmpty(companyIDScoped))
@@ -47,7 +48,8 @@ namespace gpn.Controllers
                 .Include(x => x.EquipmentNumberNavigation)
                 .Where(x =>
                 (companyID == null || x.EquipmentNumberNavigation.ComapnyId == companyID)
-                || (typeID == null || x.TypeId == typeID)
+                && (typeID == null || x.TypeId == typeID)
+                && (equipmentNumber == null || equipmentNumber.ToLower() == x.EquipmentNumber.ToLower())
                 )
                 .Select(x => new ReponseOperationDto
                 {
