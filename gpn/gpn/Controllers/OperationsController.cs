@@ -25,7 +25,7 @@ namespace gpn.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<SearchResponseDto<ReponseOperationDto>>> GetEquipments(
+        public async Task<ActionResult<SearchResponseDto<ReponseOperationDto>>> GetOperations(
            [FromQuery] int? typeID,
            [FromQuery] int? pageNumber,
            [FromQuery] int? companyID)
@@ -36,7 +36,7 @@ namespace gpn.Controllers
                 companyID = int.Parse(companyIDScoped);
             }
 
-            if (pageNumber is null && pageNumber < 1)
+            if (pageNumber is null || pageNumber < 1)
             {
                 pageNumber = 1;
             }
@@ -80,7 +80,7 @@ namespace gpn.Controllers
                 companyID = int.Parse(companyIDScoped);
             }
 
-            var operation = this.dataContext.Operations
+            var operation = await this.dataContext.Operations
                  .Include(x => x.File)
                  .Include(x => x.Type)
                  .Include(x => x.EquipmentNumberNavigation)

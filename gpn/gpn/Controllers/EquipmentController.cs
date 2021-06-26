@@ -38,7 +38,7 @@ namespace gpn.Controllers
                 companyID = int.Parse(companyIDScoped);
             }
 
-            if(pageNumber is null && pageNumber < 1)
+            if(pageNumber is null || pageNumber < 1)
             {
                 pageNumber = 1;
             }
@@ -83,7 +83,7 @@ namespace gpn.Controllers
                 companyID = int.Parse(companyIDScoped);
             }
 
-            var equipment = this.dataContext.Equipment.Include(x => x.Comapny)
+            var equipment = await this.dataContext.Equipment.Include(x => x.Comapny)
                 .Where(x =>
                 x.Number.ToLower() == number.ToLower()
                 && (companyID == null || x.ComapnyId == companyID)
