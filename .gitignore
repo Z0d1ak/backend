@@ -30,3 +30,5 @@
 *.exe
 *.out
 *.app
+gpn/gpn/bin
+gpn/.vs/*
