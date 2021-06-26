@@ -73,7 +73,7 @@ namespace gpn.Controllers
             return this.Ok(new SearchResponseDto<ResponseEquipmentDto>(eqipmentsCount, eqipments));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{number}")]
         public async Task<ActionResult<ResponseEquipmentDto>> GetByID([FromRoute]string number)
         {
             int? companyID = null;
