@@ -10,6 +10,7 @@ using gpn.Dto;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace gpn.Controllers
@@ -20,10 +21,13 @@ namespace gpn.Controllers
     public class AuthController : ControllerBase
     {
         private readonly GPNContext dataContext;
+        private readonly IConfiguration configuration;
 
-        public AuthController(GPNContext dataContext)
+        public AuthController(GPNContext dataContext,
+            IConfiguration configuration)
         {
             this.dataContext = dataContext;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -75,9 +79,13 @@ namespace gpn.Controllers
             {
                 claims.Add(new Claim("CompanyId", resp.Company.ID.ToString()));
             }
+            else
+            {
+                claims.Add(new Claim("CompanyId", ""));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
-                Consts.SecurityKey));
+                this.configuration.GetSection("AppSettings:Token").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 

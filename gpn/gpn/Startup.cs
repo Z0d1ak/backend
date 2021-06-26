@@ -19,16 +19,18 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+using Swashbuckle.AspNetCore.Filters;
+
 namespace gpn
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -38,6 +40,26 @@ namespace gpn
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = "gpn", Version = "v1" });
+                x.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+                x.AddSecurityDefinition(name: "Bearer", new OpenApiSecurityScheme()
+                {
+                    Description = "Format: 'Baerer {Token}'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                x.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme{
+                            Reference = new OpenApiReference
+                            {
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                    },
+                    new List<string>()}
+                });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -56,7 +78,7 @@ namespace gpn
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
-                        Consts.SecurityKey)
+                        this.configuration.GetSection("AppSettings:Token").Value)
                     ),
                     ValidateIssuer = false,
                     ValidateAudience = false,
@@ -80,8 +102,8 @@ namespace gpn
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
