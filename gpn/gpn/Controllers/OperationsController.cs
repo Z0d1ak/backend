@@ -64,8 +64,8 @@ namespace gpn.Controllers
                 });
 
             var operations = await operationsQeury
-                .Skip((pageNumber.Value - 1) * 20)
-                .Take(20)
+                .Skip((pageNumber.Value - 1) * 10)
+                .Take(10)
                 .ToListAsync();
 
             var operationsCount = await operationsQeury.CountAsync();

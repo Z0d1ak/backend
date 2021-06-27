@@ -69,8 +69,8 @@ namespace gpn.Controllers
                 });
 
             var eqipments = await eqipmentsQeury
-                .Skip((pageNumber.Value - 1) * 20)
-                .Take(20)
+                .Skip((pageNumber.Value - 1) * 10)
+                .Take(10)
                 .ToListAsync();
 
             var eqipmentsCount = await eqipmentsQeury.CountAsync();
