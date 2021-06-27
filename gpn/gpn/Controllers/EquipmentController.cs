@@ -42,12 +42,16 @@ namespace gpn.Controllers
             {
                 pageNumber = 1;
             }
+            if(number is not null)
+            {
+                number += '%';
+            }
 
             var eqipmentsQeury = this.dataContext.Equipment
                 .Include(x => x.Comapny)
                 .Where(x =>
                 (string.IsNullOrEmpty(parentNumber) || x.ParentId.Equals(parentNumber, StringComparison.OrdinalIgnoreCase))
-                && (string.IsNullOrEmpty(number) || x.Number.StartsWith(number, StringComparison.OrdinalIgnoreCase))
+                && (string.IsNullOrEmpty(number) || EF.Functions.Like(x.Number, number))
                 && (companyID == null || x.ComapnyId == companyID)
                 )
                 .Select(x => new ResponseEquipmentDto
