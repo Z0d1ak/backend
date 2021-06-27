@@ -50,7 +50,18 @@ namespace gpn.Controllers
                 var worksheet = workbook.Worksheets.Add("Отчет");
 
                 var i = 1;
-                foreach(var el in dt)
+                worksheet.Cell($"A{i}").Value = "Номер оборудования";
+                worksheet.Cell($"B{i}").Value = "Компания";
+
+
+                worksheet.Cell($"C{i}").Value = "Тип оборудовани";
+
+                worksheet.Cell($"D{i}").Value = "Тип операции";
+                worksheet.Cell($"E{i}").Value = "Ответственный";
+                worksheet.Cell($"F{i}").Value = "Локация";
+                worksheet.Cell($"G{i}").Value = "Время просрочки";
+                i++;
+                foreach (var el in dt)
                 {
                     worksheet.Cell($"A{i}").Value = el.EquipmentNumberNavigation?.Number;
                     worksheet.Cell($"B{i}").Value = el.EquipmentNumberNavigation?.Comapny.Name;
