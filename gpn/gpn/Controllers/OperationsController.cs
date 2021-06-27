@@ -54,6 +54,7 @@ namespace gpn.Controllers
                 .Select(x => new ReponseOperationDto
                 {
                     Id = x.Id,
+                    EquipmentNumber = x.EquipmentNumber,
                     Type = x.Type,
                     Location = x.Location,
                     Date = x.Date,
@@ -94,6 +95,7 @@ namespace gpn.Controllers
                  {
                      Id = x.Id,
                      Type = x.Type,
+                     EquipmentNumber = x.EquipmentNumber,
                      Location = x.Location,
                      Date = x.Date,
                      File = x.File,

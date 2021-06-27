@@ -60,6 +60,7 @@ namespace gpn.Controllers
                     Type = x.Type,
                     Location = x.Location,
                     State = x.State,
+                    Name = x.Name,
                     Company = new CompanyDto
                     {
                         ID = x.Comapny.Id,
@@ -98,6 +99,7 @@ namespace gpn.Controllers
                     Type = x.Type,
                     Location = x.Location,
                     State = x.State,
+                    Name = x.Name,
                     Company = new CompanyDto
                     {
                         ID = x.Comapny.Id,
